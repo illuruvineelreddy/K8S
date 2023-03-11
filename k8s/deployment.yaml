@@ -27,7 +27,7 @@ spec:
         environment: trail
     spec:
       containers:
-      - image: 674699026395.dkr.ecr.us-east-2.amazonaws.com/k8s:25
+      - image: 674699026395.dkr.ecr.us-east-2.amazonaws.com/k8s:27
         name: app9
 ---
 apiVersion: v1
