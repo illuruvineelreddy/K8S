@@ -35,8 +35,6 @@ kind: Service
 metadata:
   name: app9-svc
   namespace: app9
-annotations:
-  service.beta.kubernetes.io/aws-load-balancer-type: nlb
 spec:
   selector:
     environment: trail
@@ -51,8 +49,6 @@ kind: Ingress
 metadata:
   name: app9-ingress
   namespace: app9
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
     environment: trail
 spec:
