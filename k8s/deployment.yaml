@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app9
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    environment: trail
+  name: app9
+  namespace: app9
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      environment: trail
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        environment: trail
+    spec:
+      containers:
+      - image: app9
+        name: 674699026395.dkr.ecr.us-east-2.amazonaws.com/k8s:number
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app9-svc
+  namespace: app9
+annotations:
+  service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  selector:
+    environment: trail
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app9-ingress
+  namespace: app9
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    environment: trail
+spec:
+  rules:
+    - host: k8sapp7.awsdinesh.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app9-svc
+                port:
+                  name: http
